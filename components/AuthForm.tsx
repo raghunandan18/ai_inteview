@@ -41,7 +41,7 @@ const AuthForm = () => {
         <div className="card-border lg:min-w-[566px]">
             <div className = "flex flex-col gap-6 card px-10 py-14">
               <div className="flex flex-row gap-2 justify-center">
-                <image src = "/logo.svg" alt = "logo" height={32} width={38} />              
+                {/* <image src = "/logo.svg" alt = "logo" height={32} width={38} />               */}
               </div>  
             </div> 
     <Form {...form}>

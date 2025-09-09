@@ -26,18 +26,17 @@ const FormField = <T extends FieldValues>({
         <FormItem>
           <FormLabel className="label">{label}</FormLabel>
           <FormControl>
-            <Input 
+            <Input className ="input"
             placeholder={placeholder} 
             type={type} 
             {...field} 
             />
           </FormControl>
-          <FormDescription>
-            This is your public display name.
-          </FormDescription>
           <FormMessage />
         </FormItem>
       )}
     />
   );
 }
+
+export default FormField

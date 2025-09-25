@@ -3,15 +3,15 @@ import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 
-enum CallStatus{
-    INACVTIVE = 'INACTIVE',
+enum CallStatus {
+    INACTIVE = 'INACTIVE',
     ACTIVE = 'ACTIVE',
     CONNECTING = 'CONNECTING',
     DISCONNECTED = 'DISCONNECTED'
 }
 
 const Agent = ({userName}: AgentProps) => {
-    const callStatus = CallStatus.DISCONNECTED; 
+    const callStatus: CallStatus = CallStatus.DISCONNECTED;
     const isSpeaking = true; 
     const messages = [
         'whats your name?',
@@ -52,14 +52,21 @@ const Agent = ({userName}: AgentProps) => {
             )}
 
             <div className="w-full flex justify-center mt-4 ">
-                {callStatus !== 'ACTIVE' ? (
-                    <button className=" relative btn-call">
-                        <span className = {cn("absolute left-0 top-0 w-full h-full opacity-75 rounded-full animate-ping",callStatus!=='CONNECTING'&'hidden')}/> 
-                        <span>{callStatus === 'INACTIVE' || callStatus === 'DISCONNECTED' ? 'Call' : 'Connecting...'}</span>
+                {(callStatus as CallStatus) !== CallStatus.ACTIVE ? (
+                    <button className="relative btn-call">
+                        <span className={cn(
+                            "absolute left-0 top-0 w-full h-full opacity-75 rounded-full animate-ping",
+                            (callStatus as CallStatus) !== CallStatus.CONNECTING && "hidden"
+                        )} />
+                        <span>{
+                            (callStatus as CallStatus) === CallStatus.INACTIVE || (callStatus as CallStatus) === CallStatus.DISCONNECTED
+                                ? 'Call'
+                                : 'Connecting...'
+                        }</span>
                     </button>
                 ) : (
-                        <button className="">End Call</button>
-                    )}
+                    <button className="">End Call</button>
+                )}
             </div>
         </>
     )

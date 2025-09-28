@@ -9,7 +9,7 @@ import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import  FormField from "@/components/FormField"
-import { signIn, signUp } from "@/lib/actions/auth.actions"
+import { signIn, signUp } from "@/lib/actions/auth.action"
 import { auth } from "@/firebase/client"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "@firebase/auth"
 

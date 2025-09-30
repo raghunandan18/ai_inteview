@@ -1,4 +1,4 @@
-import { CreateAssistantDTO } from "@vapi-ai/web/dist/api";
+import { CreateAssistantDTO, CreateWorkflowDTO } from "@vapi-ai/web/dist/api";
 import { z } from "zod";
 
 export const mappings = {
@@ -97,6 +97,178 @@ export const mappings = {
   "aws amplify": "amplify",
 };
 
+
+export const generator: CreateWorkflowDTO = 
+{
+  "name": "ai_interview_prep",
+  "nodes": [
+    {
+      "name": "introduction",
+      "type": "conversation",
+      "isStart": true,
+      "metadata": {
+        "position": {
+          "x": -661.9809898882805,
+          "y": -83.42485446751547
+        }
+      },
+      "prompt": "You are a friendly AI interview preparation assistant. \nYou are a professional career coach having a natural conversation. After greeting the user, gather information about their interview preparation needs conversationally, just as a real consultant would.\nKey behaviors:\nRespond to social cues (if they ask how you are, acknowledge it naturally)\nShow interest in their responses with brief encouraging comments\nAsk follow-up questions when appropriate to show you're listening\nUse varied phrasing - never repeat the same sentence structure\nConnect their answers to show you understand their goals.\n",
+      "voice": {
+        "model": "eleven_turbo_v2_5",
+        "voiceId": "mCQMfsqGDT6IDkEKR20a",
+        "provider": "11labs"
+      },
+      "globalNodePlan": {
+        "enabled": true,
+        "enterCondition": ""
+      },
+      "variableExtractionPlan": {
+        'output': [
+          {
+            "enum": [],
+            "type": "string",
+            "title": "role",
+            "description": "What role would you like to train for?"
+          },
+          {
+            "enum": [],
+            "type": "string",
+            "title": "type",
+            "description": "Are you aiming for a technical, behavioral, or mixed interview?"
+          },
+          {
+            "enum": [],
+            "type": "string",
+            "title": "level",
+            "description": "The job experience level."
+          },
+          {
+            "enum": [],
+            "type": "string",
+            "title": "amount",
+            "description": "How many questions would you like me to prepare for you?"
+          },
+          {
+            "enum": [],
+            "type": "string",
+            "title": "techstack",
+            "description": "A list of technologies to cover during the job interview."
+          }
+        ]
+      },
+      "messagePlan": {
+        "firstMessage": "Hello {{username}}! Let's prepare your interview. I'll ask you a few questions and generate a perfect interview just for you. Are you ready? "
+      },
+      "toolIds": []
+    },
+    {
+      "name": "apiRequest_1756363549561",
+      "type": "tool",
+      "metadata": {
+        "position": {
+          "x": -661.0532700159362,
+          "y": 806.5114163423048
+        }
+      },
+      "tool": {
+        "url": "https://ai-interview-prep-two-red.vercel.app/api/vapi/generate",
+        "body": {
+          "type": "object",
+          "required": [
+            "techstack",
+            "userid",
+            "amount",
+            "type",
+            "level",
+            "role"
+          ],
+          "properties": {
+            "role": {
+              "type": "string",
+              "default": "{{role}}",
+              "description": ""
+            },
+            "type": {
+              "type": "string",
+              "default": "{{type}}",
+              "description": ""
+            },
+            "level": {
+              "type": "string",
+              "default": "{{level}}",
+              "description": ""
+            },
+            "amount": {
+              "type": "string",
+              "default": "{{amount}}",
+              "description": ""
+            },
+            "userid": {
+              "type": "string",
+              "default": "{{userid}}",
+              "description": ""
+            },
+            "techstack": {
+              "type": "string",
+              "default": "{{techstack}}",
+              "description": ""
+            }
+          }
+        },
+        "name": "getUserData",
+        "type": "apiRequest",
+        "method": "POST",
+        "function": {
+          "name": "api_request_tool",
+          "parameters": {
+            "type": "object",
+            "required": [],
+            "properties": {}
+          },
+          "description": "API request tool"
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "type": "request-complete",
+            "content": "Thanks for your patience! I am happy to let you know that your interview has been successfully generated. I will redirect you to the dashboard now. Thanks for the call!",
+            "endCallAfterSpokenEnabled": true
+          },
+          {
+            "type": "request-failed",
+            "content": "Oops, looks like something went wrong with your internet! Please try again",
+            "endCallAfterSpokenEnabled": true
+          }
+        ],
+        "variableExtractionPlan": {
+          "schema": {
+            "type": "object",
+            "required": [],
+            "properties": {}
+          },
+          "aliases": []
+        }
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "introduction",
+      "to": "apiRequest_1756363549561",
+      "condition": {
+        "type": "ai",
+        "prompt": "if the user provided all the data to be extra"
+      }
+    }
+  ],
+  "voice": {
+    "model": "eleven_turbo_v2_5",
+    "voiceId": "mCQMfsqGDT6IDkEKR20a",
+    "provider": "11labs"
+  },
+  "globalPrompt": ""
+}
+
 export const interviewer: CreateAssistantDTO = {
   name: "Interviewer",
   firstMessage:
@@ -154,6 +326,7 @@ End the conversation on a polite and positive note.
     ],
   },
 };
+
 
 export const feedbackSchema = z.object({
   totalScore: z.number(),
